@@ -2,7 +2,16 @@ let projectsData = [];
 let currentMediaIndex = 0;
 let currentMediaList = [];
 
+function showLoader() {
+  document.getElementById('loader').style.display = 'flex';
+}
+
+function hideLoader() {
+  document.getElementById('loader').style.display = 'none';
+}
+
 async function loadProjects() {
+  showLoader();
   const response = await fetch('projects.json');
   const data = await response.json();
   projectsData = data.projects;
@@ -16,14 +25,18 @@ async function loadProjects() {
     projectList.appendChild(div);
   });
 
-  // ✅ Auto-select first project
+  
   if (projectsData.length > 0) {
     const firstProject = projectList.querySelector('.project');
     if (firstProject) firstProject.click();
   }
+
+  hideLoader(); 
 }
 
 function loadMedia(projectIndex, clickedElement) {
+  showLoader(); // 🔥 Show loader while switching projects
+
   document.querySelectorAll('.project').forEach(p => p.classList.remove('active'));
   clickedElement.classList.add('active');
 
@@ -32,8 +45,17 @@ function loadMedia(projectIndex, clickedElement) {
 
   const project = projectsData[projectIndex];
 
-  // ✅ Use RELATIVE paths (works locally and on GitHub Pages)
   currentMediaList = project.files.map(file => `media/${project.folder}/${file}`);
+
+  let itemsLoaded = 0;
+  const totalItems = currentMediaList.length;
+
+  function checkAllLoaded() {
+    itemsLoaded++;
+    if (itemsLoaded >= totalItems) {
+      hideLoader();
+    }
+  }
 
   currentMediaList.forEach((file, idx) => {
     const wrapper = document.createElement('div');
@@ -49,26 +71,37 @@ function loadMedia(projectIndex, clickedElement) {
       mediaEl.muted = true;
       mediaEl.playsInline = true;
       mediaEl.controls = false;
-      wrapper.classList.add('loaded');
+
+      mediaEl.onloadeddata = () => {
+        wrapper.classList.add('loaded');
+        checkAllLoaded();
+      };
     } 
     else if (file.endsWith('.pdf')) {
       const fileName = file.split('/').pop().replace('.pdf', '');
       mediaEl = document.createElement('img');
-
-      // ✅ RELATIVE path for icons
       mediaEl.src = `icons/${fileName}-pdf.png`;
-      mediaEl.onload = () => wrapper.classList.add('loaded');
+      mediaEl.onload = () => {
+        wrapper.classList.add('loaded');
+        checkAllLoaded();
+      };
     } 
     else {
       mediaEl = document.createElement('img');
       mediaEl.src = file;
-      mediaEl.onload = () => wrapper.classList.add('loaded');
+      mediaEl.onload = () => {
+        wrapper.classList.add('loaded');
+        checkAllLoaded();
+      };
     }
 
     mediaEl.addEventListener('click', () => openLightbox(idx));
     wrapper.appendChild(mediaEl);
     grid.appendChild(wrapper);
   });
+
+  
+  if (totalItems === 0) hideLoader();
 }
 
 function openLightbox(index) {

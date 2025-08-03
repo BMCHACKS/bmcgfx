@@ -16,6 +16,7 @@ async function loadProjects() {
     projectList.appendChild(div);
   });
 
+  // ✅ Auto-select first project
   if (projectsData.length > 0) {
     const firstProject = projectList.querySelector('.project');
     if (firstProject) firstProject.click();
@@ -30,7 +31,9 @@ function loadMedia(projectIndex, clickedElement) {
   grid.innerHTML = '';
 
   const project = projectsData[projectIndex];
-  currentMediaList = project.files.map(file => `/media/${project.folder}/${file}`);
+
+  // ✅ Use RELATIVE paths (works locally and on GitHub Pages)
+  currentMediaList = project.files.map(file => `media/${project.folder}/${file}`);
 
   currentMediaList.forEach((file, idx) => {
     const wrapper = document.createElement('div');
@@ -46,24 +49,22 @@ function loadMedia(projectIndex, clickedElement) {
       mediaEl.muted = true;
       mediaEl.playsInline = true;
       mediaEl.controls = false;
-
       wrapper.classList.add('loaded');
     } 
     else if (file.endsWith('.pdf')) {
       const fileName = file.split('/').pop().replace('.pdf', '');
       mediaEl = document.createElement('img');
-      mediaEl.src = `/icons/${fileName}-pdf.png`;
 
+      // ✅ RELATIVE path for icons
+      mediaEl.src = `icons/${fileName}-pdf.png`;
       mediaEl.onload = () => wrapper.classList.add('loaded');
     } 
     else {
       mediaEl = document.createElement('img');
       mediaEl.src = file;
-
       mediaEl.onload = () => wrapper.classList.add('loaded');
     }
 
-    
     mediaEl.addEventListener('click', () => openLightbox(idx));
     wrapper.appendChild(mediaEl);
     grid.appendChild(wrapper);
@@ -132,6 +133,5 @@ document.getElementById('next').onclick = () => {
   currentMediaIndex = (currentMediaIndex + 1) % currentMediaList.length;
   openLightbox(currentMediaIndex);
 };
-
 
 loadProjects();

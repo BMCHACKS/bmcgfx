@@ -33,7 +33,11 @@ function loadMedia(projectIndex, clickedElement) {
   const project = projectsData[projectIndex];
 
 
-  currentMediaList = project.files.map(file => `media/${project.folder}/${file}`);
+  
+currentMediaList = project.files.map(file => {
+  return file.startsWith('http') ? file : `media/${project.folder}/${file}`;
+});
+
 
   currentMediaList.forEach((file, idx) => {
     const wrapper = document.createElement('div');

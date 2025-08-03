@@ -65,7 +65,7 @@ html, body {
   gap: 15px; 
 }
 
-/* ✅ Media Item Styling */
+
 .media-item {
   flex: 1 1 calc(33.3333% - 10px); 
   max-width: calc(33.3333% - 10px);
@@ -84,7 +84,7 @@ html, body {
   transform: translateY(0);
 }
 
-/* ✅ Shimmer Placeholder */
+
 .media-item.loading .placeholder {
   width: 100%;
   height: 200px;
@@ -131,7 +131,7 @@ html, body {
   }
 }
 
-/* ✅ Lightbox */
+
 .lightbox {
   display: none;
   position: fixed;
@@ -207,3 +207,4 @@ html, body {
   filter: grayscale(0%) brightness(1.2) sepia(1) hue-rotate(90deg) saturate(5);
   transform: scale(1.1);
 }
+

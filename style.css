@@ -198,6 +198,23 @@ html, body {
   transform: scale(1.1);
 }
 
+@media (max-width: 1200px) {
+  .container {
+    flex-direction: row !important;
+  }
+  .left-panel {
+    width: 30% !important;
+  }
+  .right-panel {
+    width: 70% !important;
+  }
+  .media-item {
+    flex: 1 1 calc(33.3333% - 10px) !important;
+    max-width: calc(33.3333% - 10px) !important;
+  }
+}
+
+
 
 
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMC Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+      <div class="left-panel" id="project-list">
+          <div class="logo">
+            <video autoplay loop muted playsinline>
+              <source src="icons/logo.webm" type="video/webm">
+            </video>
+          </div>
+          <div class="social-links">
+            <a href="https://www.linkedin.com/in/bmcgfx/" target="_blank">
+              <img src="/icons/linkedin.svg" alt="LinkedIn">
+            </a>
+            <a href="https://www.upwork.com/freelancers/~01157a94637d3e69fc" target="_blank">
+              <img src="/icons/upwork.svg" alt="Upwork">
+            </a>
+          </div>
+      </div>
+    <div class="right-panel" id="media-grid"></div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="close" id="lightbox-close">&times;</span>
+    <span class="arrow left" id="prev">&#10094;</span>
+    <span class="arrow right" id="next">&#10095;</span>
+    <div class="lightbox-content" id="lightbox-content"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -16,7 +16,7 @@ async function loadProjects() {
     projectList.appendChild(div);
   });
 
-  // ✅ Auto-select first project
+
   if (projectsData.length > 0) {
     const firstProject = projectList.querySelector('.project');
     if (firstProject) firstProject.click();
@@ -32,7 +32,7 @@ function loadMedia(projectIndex, clickedElement) {
 
   const project = projectsData[projectIndex];
 
-  // ✅ Use RELATIVE paths (works locally and on GitHub Pages)
+
   currentMediaList = project.files.map(file => `media/${project.folder}/${file}`);
 
   currentMediaList.forEach((file, idx) => {
@@ -55,7 +55,7 @@ function loadMedia(projectIndex, clickedElement) {
       const fileName = file.split('/').pop().replace('.pdf', '');
       mediaEl = document.createElement('img');
 
-      // ✅ RELATIVE path for icons
+ 
       mediaEl.src = `icons/${fileName}-pdf.png`;
       mediaEl.onload = () => wrapper.classList.add('loaded');
     } 
@@ -135,3 +135,4 @@ document.getElementById('next').onclick = () => {
 };
 
 loadProjects();
+

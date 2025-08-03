@@ -2,10 +2,6 @@ let projectsData = [];
 let currentMediaIndex = 0;
 let currentMediaList = [];
 
-// Batching settings
-const batchSize = 20; 
-let currentBatch = 0;
-
 async function loadProjects() {
   const response = await fetch('projects.json');
   const data = await response.json();
@@ -19,6 +15,7 @@ async function loadProjects() {
     div.addEventListener('click', () => loadMedia(index, div));
     projectList.appendChild(div);
   });
+
 
   if (projectsData.length > 0) {
     const firstProject = projectList.querySelector('.project');
@@ -35,31 +32,13 @@ function loadMedia(projectIndex, clickedElement) {
 
   const project = projectsData[projectIndex];
 
-  currentMediaList = project.files.map(file => {
-    return `media/${project.folder}/${file}`;
-  });
 
-  currentBatch = 0;
-  loadNextBatch();
+  currentMediaList = project.files.map(file => `media/${project.folder}/${file}`);
 
-  const rightPanel = document.querySelector('.right-panel');
-  rightPanel.onscroll = () => {
-    if (rightPanel.scrollTop + rightPanel.clientHeight >= rightPanel.scrollHeight - 300) {
-      loadNextBatch();
-    }
-  };
-}
-
-function loadNextBatch() {
-  const grid = document.getElementById('media-grid');
-  const start = currentBatch * batchSize;
-  const end = start + batchSize;
-  const batch = currentMediaList.slice(start, end);
-
-  batch.forEach((file, idx) => {
+  currentMediaList.forEach((file, idx) => {
     const wrapper = document.createElement('div');
     wrapper.className = 'media-item';
-    wrapper.style.animationDelay = `${idx * 0.03}s`;
+    wrapper.style.animationDelay = `${idx * 0.05}s`;
 
     let mediaEl;
     if (file.endsWith('.mp4')) {
@@ -70,25 +49,26 @@ function loadNextBatch() {
       mediaEl.muted = true;
       mediaEl.playsInline = true;
       mediaEl.controls = false;
+      wrapper.classList.add('loaded');
     } 
     else if (file.endsWith('.pdf')) {
       const fileName = file.split('/').pop().replace('.pdf', '');
       mediaEl = document.createElement('img');
+
+ 
       mediaEl.src = `icons/${fileName}-pdf.png`;
-      mediaEl.loading = "lazy";
+      mediaEl.onload = () => wrapper.classList.add('loaded');
     } 
     else {
       mediaEl = document.createElement('img');
       mediaEl.src = file;
-      mediaEl.loading = "lazy";
+      mediaEl.onload = () => wrapper.classList.add('loaded');
     }
 
-    mediaEl.addEventListener('click', () => openLightbox(start + idx));
+    mediaEl.addEventListener('click', () => openLightbox(idx));
     wrapper.appendChild(mediaEl);
     grid.appendChild(wrapper);
   });
-
-  currentBatch++;
 }
 
 function openLightbox(index) {
@@ -155,3 +135,4 @@ document.getElementById('next').onclick = () => {
 };
 
 loadProjects();
+

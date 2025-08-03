@@ -25,7 +25,7 @@ async function loadProjects() {
     projectList.appendChild(div);
   });
 
-  
+  // ✅ Auto-select first project
   if (projectsData.length > 0) {
     const firstProject = projectList.querySelector('.project');
     if (firstProject) firstProject.click();
@@ -35,7 +35,7 @@ async function loadProjects() {
 }
 
 function loadMedia(projectIndex, clickedElement) {
-  showLoader(); // 🔥 Show loader while switching projects
+  showLoader(); // Show loader while switching projects
 
   document.querySelectorAll('.project').forEach(p => p.classList.remove('active'));
   clickedElement.classList.add('active');
@@ -44,7 +44,6 @@ function loadMedia(projectIndex, clickedElement) {
   grid.innerHTML = '';
 
   const project = projectsData[projectIndex];
-
   currentMediaList = project.files.map(file => `media/${project.folder}/${file}`);
 
   let itemsLoaded = 0;
@@ -59,8 +58,13 @@ function loadMedia(projectIndex, clickedElement) {
 
   currentMediaList.forEach((file, idx) => {
     const wrapper = document.createElement('div');
-    wrapper.className = 'media-item';
+    wrapper.className = 'media-item loading';
     wrapper.style.animationDelay = `${idx * 0.05}s`;
+
+    // ✅ Add shimmer placeholder
+    const placeholder = document.createElement('div');
+    placeholder.className = 'placeholder';
+    wrapper.appendChild(placeholder);
 
     let mediaEl;
     if (file.endsWith('.mp4')) {
@@ -73,7 +77,9 @@ function loadMedia(projectIndex, clickedElement) {
       mediaEl.controls = false;
 
       mediaEl.onloadeddata = () => {
-        wrapper.classList.add('loaded');
+        wrapper.classList.remove('loading');
+        placeholder.remove();
+        wrapper.appendChild(mediaEl);
         checkAllLoaded();
       };
     } 
@@ -82,7 +88,9 @@ function loadMedia(projectIndex, clickedElement) {
       mediaEl = document.createElement('img');
       mediaEl.src = `icons/${fileName}-pdf.png`;
       mediaEl.onload = () => {
-        wrapper.classList.add('loaded');
+        wrapper.classList.remove('loading');
+        placeholder.remove();
+        wrapper.appendChild(mediaEl);
         checkAllLoaded();
       };
     } 
@@ -90,17 +98,17 @@ function loadMedia(projectIndex, clickedElement) {
       mediaEl = document.createElement('img');
       mediaEl.src = file;
       mediaEl.onload = () => {
-        wrapper.classList.add('loaded');
+        wrapper.classList.remove('loading');
+        placeholder.remove();
+        wrapper.appendChild(mediaEl);
         checkAllLoaded();
       };
     }
 
     mediaEl.addEventListener('click', () => openLightbox(idx));
-    wrapper.appendChild(mediaEl);
     grid.appendChild(wrapper);
   });
 
-  
   if (totalItems === 0) hideLoader();
 }
 

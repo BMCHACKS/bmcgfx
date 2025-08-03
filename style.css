@@ -14,12 +14,11 @@ html, body {
 }
 
 .container {
-  display: flex;
+  min-width: 1200px; 
   height: 100vh;
-  width: 100vw;
 }
 
-.left-panel {
+/* .left-panel {
   width: 30%;
   background: rgb(255, 255, 255);
   padding: 50px;
@@ -27,6 +26,12 @@ html, body {
   flex-direction: column;
   justify-content: flex-start;
   position: relative;
+}
+ */
+.left-panel {
+  width: 30%;
+  background: rgb(255, 255, 255);
+  padding: 50px;
 }
 
 .left-panel h1 {
@@ -53,7 +58,7 @@ html, body {
   color: rgb(152, 152, 152);
 }
 
-.right-panel {
+/* .right-panel {
   width: 70%;
   background: linear-gradient(to bottom, rgb(221, 221, 221), #bdbdbd);
   padding: 20px;
@@ -63,6 +68,10 @@ html, body {
   flex-wrap: wrap;
   align-content: flex-start; 
   gap: 15px; 
+}
+ */
+.right-panel {
+  width: 70%;
 }
 
 
@@ -188,6 +197,7 @@ html, body {
   filter: grayscale(0%) brightness(1.2) sepia(1) hue-rotate(90deg) saturate(5);
   transform: scale(1.1);
 }
+
 
 
 
